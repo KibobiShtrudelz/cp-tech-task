@@ -14,7 +14,7 @@ import {
 } from '@interface'
 import { fetchAccessLogsService, fetchAccessLogsServiceByFilter } from '@services'
 
-const range: Range = { from: 0, to: 0 }
+const range: Range<'number'> = { from: 0, to: 0 }
 const { useRef, useState, useEffect } = React
 const filters = [
   { name: 'URL', type: 'url' },
@@ -51,7 +51,7 @@ export function useApp() {
 
   //   const { data: accessLogs } = useQuery(fetchAccessLogsService())
   const { data: accessLogs } = useQuery(fetchAccessLogsServiceByFilter('selectedFilter'))
-  console.log('accessLogs', accessLogs)
+  //   console.log('accessLogs', accessLogs)
 
   const timestampFromToastRef = useRef(null)
 
@@ -64,7 +64,7 @@ export function useApp() {
     formState: { errors }
   } = useForm<FormData>()
 
-  const onSubmit = handleSubmit(data => console.log(data))
+  const onSubmit = handleSubmit(data => console.log('form data >>>', data))
 
   useEffect(() => {
     const documentStyle = getComputedStyle(document.documentElement)

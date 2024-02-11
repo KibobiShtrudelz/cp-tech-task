@@ -120,7 +120,7 @@ export function App() {
               <span className="p-float-label">
                 <InputText
                   id={field.name}
-                  value={field.value}
+                  value={field.value || ''}
                   className={clsx(fieldState.error && 'p-invalid')}
                   onChange={e => field.onChange(e.target.value)}
                 />
@@ -134,16 +134,14 @@ export function App() {
             control={control}
             render={({ field, fieldState }) => (
               <span className="p-float-label">
-                <Dropdown
-                  showClear
+                <InputText
+                  keyfilter="int"
                   id={field.name}
                   value={field.value}
-                  focusInputRef={field.ref}
-                  options={Array.from({ length: 31 }, (_, i) => (i + 1).toString())}
-                  className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
-                  onChange={e => field.onChange(e.value)}
+                  className={clsx(fieldState.error && 'p-invalid')}
+                  onChange={e => field.onChange(e.target.value)}
                 />
-                <label htmlFor="dd-filter">Response From</label>
+                <label htmlFor={field.name}>Response time From</label>
               </span>
             )}
           />
@@ -153,16 +151,14 @@ export function App() {
             control={control}
             render={({ field, fieldState }) => (
               <span className="p-float-label">
-                <Dropdown
-                  showClear
+                <InputText
+                  keyfilter="int"
                   id={field.name}
                   value={field.value}
-                  focusInputRef={field.ref}
-                  options={Array.from({ length: 31 }, (_, i) => (i + 1).toString())}
-                  className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
-                  onChange={e => field.onChange(e.value)}
+                  className={clsx(fieldState.error && 'p-invalid')}
+                  onChange={e => field.onChange(e.target.value)}
                 />
-                <label htmlFor="dd-filter">Response To</label>
+                <label htmlFor={field.name}>Response time To</label>
               </span>
             )}
           />

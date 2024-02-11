@@ -19,9 +19,9 @@ export const fetchAccessLogsServiceByFilter = (filter: Filter | undefined) => ({
     )
 
     const fromTimestamp = new Date(timeRange.from * 1000)
-    console.log('fromTimestamp', new Date(fromTimestamp))
+    // console.log('fromTimestamp', new Date(fromTimestamp))
     const toTimestamp = new Date(timeRange.to * 1000)
-    console.log('toTimestamp', new Date(toTimestamp))
+    // console.log('toTimestamp', new Date(toTimestamp))
 
     return {
       // successStatuses
