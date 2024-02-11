@@ -2,9 +2,37 @@
   position: absolute;
   inset: clamp(16px, 2vw, 24px);
 
+  display: flex;
+  row-gap: 32px;
+  flex-direction: column;
+
   padding: 16px;
+  overflow-y: auto;
   border-radius: 6px;
   background-color: #fff;
   border: 1px solid #e7e8eb;
   box-shadow: -6px 4px 14px -6px #b2b3b4;
+
+  section {
+    &.titleSection {
+      text-align: center;
+    }
+
+    &.filterSection {
+      form {
+        display: flex;
+        row-gap: 26px;
+        column-gap: 16px;
+        flex-wrap: wrap;
+
+        .dropdown {
+          width: 160px;
+        }
+
+        .button {
+          width: 100px;
+        }
+      }
+    }
+  }
 }
