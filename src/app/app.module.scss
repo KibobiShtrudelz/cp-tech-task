@@ -2,10 +2,9 @@
   position: absolute;
   inset: clamp(16px, 2vw, 24px);
 
-  display: grid;
-  gap: var(--gutter-default);
-  grid-template-rows: 100px 1fr;
-  grid-template-areas:
-    'header'
-    'main';
+  padding: 16px;
+  border-radius: 6px;
+  background-color: #fff;
+  border: 1px solid #e7e8eb;
+  box-shadow: -6px 4px 14px -6px #b2b3b4;
 }

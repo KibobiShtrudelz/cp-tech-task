@@ -6,7 +6,7 @@ import styles from './app.module.scss'
 
 export function App() {
   const { data: accessLogs, isFetching } = useQuery(accessLogsService())
-  console.log('accessLogs >>>', accessLogs)
+  // console.log('accessLogs >>>', accessLogs)
 
   return (
     <div className={styles.app}>
