@@ -21,10 +21,9 @@ export function useApp() {
   const [chartData, setChartData] = useState({})
   const [chartOptions, setChartOptions] = useState({})
   const [formValues, setFormValues] = useState<FormData>()
-  console.log('formValues >>>', formValues)
 
-  const { data: accessLogs } = useQuery(fetchAccessLogsByFiltersService(formValues))
-  // console.log('accessLogs', accessLogs)
+  const { data: accessLogs, refetch } = useQuery(fetchAccessLogsByFiltersService(formValues))
+  console.log('accessLogs >>>', accessLogs)
 
   const timestampFromToastRef = useRef(null)
 
@@ -39,65 +38,69 @@ export function useApp() {
 
   const onSubmit = handleSubmit(setFormValues)
 
+  // Този useEffect ще обновява chart-а
+  // useEffect(() => {
+  //   const documentStyle = getComputedStyle(document.documentElement)
+  //   const textColor = documentStyle.getPropertyValue('--text-color')
+  //   const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary')
+  //   const surfaceBorder = documentStyle.getPropertyValue('--surface-border')
+
+  //   const data = {
+  //     labels: getDays({ from: 0, to: 31 }),
+
+  //     datasets: [
+  //       {
+  //         type: 'bar',
+  //         label: 'Success',
+  //         backgroundColor: documentStyle.getPropertyValue('--green-500'),
+  //         //   data: accessLogs?.success.map(log => log.status)
+  //         data: [50, 25, 12, 48, 90, 76, 42, 33, 45, 65, 22, 45]
+  //       },
+  //       {
+  //         type: 'bar',
+  //         label: 'Warning',
+  //         backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
+  //         //   data: accessLogs?.warning.map(log => log.status)
+  //         data: [11, 21, 84, 24, 75, 37, 65, 34, 45, 65, 22, 45]
+  //       },
+  //       {
+  //         type: 'bar',
+  //         label: 'Error',
+  //         backgroundColor: documentStyle.getPropertyValue('--red-500'),
+  //         //   data: accessLogs?.error.map(log => log.status)
+  //         data: [41, 52, 24, 74, 23, 21, 32, 45, 65, 22, 45, 33]
+  //       }
+  //     ]
+  //   }
+
+  //   const options = {
+  //     maintainAspectRatio: false,
+  //     aspectRatio: 0.8,
+  //     plugins: {
+  //       tooltips: { mode: 'index', intersect: false },
+  //       legend: { labels: { color: textColor } }
+  //     },
+  //     scales: {
+  //       x: {
+  //         stacked: true,
+  //         ticks: { color: textColorSecondary },
+  //         grid: { color: surfaceBorder }
+  //       },
+  //       y: {
+  //         stacked: true,
+  //         ticks: { color: textColorSecondary },
+  //         grid: { color: surfaceBorder }
+  //       }
+  //     }
+  //   }
+
+  //   setChartData(data)
+  //   setChartOptions(options)
+  // }, [])
+
   useEffect(() => {
-    const documentStyle = getComputedStyle(document.documentElement)
-    const textColor = documentStyle.getPropertyValue('--text-color')
-    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary')
-    const surfaceBorder = documentStyle.getPropertyValue('--surface-border')
-
-    const data = {
-      labels: getDays({ from: 0, to: 31 }),
-      // labels: Array.from({ length: 31 }, (_, i) => (i + 1).toString()),
-
-      datasets: [
-        {
-          type: 'bar',
-          label: 'Success',
-          backgroundColor: documentStyle.getPropertyValue('--green-500'),
-          //   data: accessLogs?.success.map(log => log.status)
-          data: [50, 25, 12, 48, 90, 76, 42, 33, 45, 65, 22, 45]
-        },
-        {
-          type: 'bar',
-          label: 'Warning',
-          backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
-          //   data: accessLogs?.warning.map(log => log.status)
-          data: [11, 21, 84, 24, 75, 37, 65, 34, 45, 65, 22, 45]
-        },
-        {
-          type: 'bar',
-          label: 'Error',
-          backgroundColor: documentStyle.getPropertyValue('--red-500'),
-          //   data: accessLogs?.error.map(log => log.status)
-          data: [41, 52, 24, 74, 23, 21, 32, 45, 65, 22, 45, 33]
-        }
-      ]
-    }
-
-    const options = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.8,
-      plugins: {
-        tooltips: { mode: 'index', intersect: false },
-        legend: { labels: { color: textColor } }
-      },
-      scales: {
-        x: {
-          stacked: true,
-          ticks: { color: textColorSecondary },
-          grid: { color: surfaceBorder }
-        },
-        y: {
-          stacked: true,
-          ticks: { color: textColorSecondary },
-          grid: { color: surfaceBorder }
-        }
-      }
-    }
-
-    setChartData(data)
-    setChartOptions(options)
-  }, [])
+    refetch()
+  }, [formValues, refetch])
 
   return {
     control,

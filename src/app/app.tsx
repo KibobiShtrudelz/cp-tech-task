@@ -50,7 +50,7 @@ export function App() {
                   className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                   onChange={e => field.onChange(e.value)}
                 />
-                <label htmlFor="dd-filter">Timestamp From</label>
+                <label htmlFor="dd-filter">Timestamp From day</label>
               </span>
             )}
           />
@@ -69,7 +69,7 @@ export function App() {
                   className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                   onChange={e => field.onChange(e.value)}
                 />
-                <label htmlFor="dd-filter">Timestamp To</label>
+                <label htmlFor="dd-filter">Timestamp To day</label>
               </span>
             )}
           />
@@ -176,9 +176,9 @@ export function App() {
         </form>
       </section>
 
-      <section>
+      {/* <section>
         <Chart type="bar" data={chartData} options={chartOptions} />
-      </section>
+      </section> */}
     </div>
   )
 }
