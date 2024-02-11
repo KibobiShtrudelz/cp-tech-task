@@ -3,12 +3,12 @@ import { Chart } from 'primereact/chart'
 import { Button } from 'primereact/button'
 import { Controller } from 'react-hook-form'
 import { Dropdown } from 'primereact/dropdown'
+import { InputText } from 'primereact/inputtext'
 import { VirtualScroller } from 'primereact/virtualscroller'
 
 import { useApp } from './use-app'
 
 import styles from './app.module.scss'
-import { InputText } from 'primereact/inputtext'
 
 export function App() {
   const {
@@ -137,7 +137,7 @@ export function App() {
                 <InputText
                   keyfilter="int"
                   id={field.name}
-                  value={field.value}
+                  value={field.value || ''}
                   className={clsx(fieldState.error && 'p-invalid')}
                   onChange={e => field.onChange(e.target.value)}
                 />
@@ -154,7 +154,7 @@ export function App() {
                 <InputText
                   keyfilter="int"
                   id={field.name}
-                  value={field.value}
+                  value={field.value || ''}
                   className={clsx(fieldState.error && 'p-invalid')}
                   onChange={e => field.onChange(e.target.value)}
                 />
