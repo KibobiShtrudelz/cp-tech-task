@@ -6,6 +6,8 @@ import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import { VirtualScroller } from 'primereact/virtualscroller'
 
+import { getDays } from '@utils'
+
 import { useApp } from './use-app'
 
 import styles from './app.module.scss'
@@ -13,7 +15,6 @@ import styles from './app.module.scss'
 export function App() {
   const {
     control,
-    filters,
     register,
     setValue,
     chartData,
@@ -30,7 +31,7 @@ export function App() {
   return (
     <div className={styles.app}>
       <section className={styles.titleSection}>
-        <h1>Crownpeak tech task</h1>
+        <h1>Crownpeak Tech Task</h1>
       </section>
 
       <section className={styles.filterSection}>
@@ -45,7 +46,7 @@ export function App() {
                   id={field.name}
                   value={field.value}
                   focusInputRef={field.ref}
-                  options={Array.from({ length: 31 }, (_, i) => (i + 1).toString())}
+                  options={getDays({ from: 0, to: 31 }) || []}
                   className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                   onChange={e => field.onChange(e.value)}
                 />
@@ -64,7 +65,7 @@ export function App() {
                   id={field.name}
                   value={field.value}
                   focusInputRef={field.ref}
-                  options={Array.from({ length: 31 }, (_, i) => (i + 1).toString())}
+                  options={getDays({ from: 0, to: 31 }) || []}
                   className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                   onChange={e => field.onChange(e.value)}
                 />
