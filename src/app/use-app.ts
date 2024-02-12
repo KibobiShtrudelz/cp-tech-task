@@ -8,7 +8,7 @@ import { issueTypes, statusTypes } from '@constants'
 import { fetchAccessLogsByFiltersService } from '@services'
 import { convertUnixTimestampToDate, getRemainingDays } from '@utils'
 
-const { useRef, useState, useEffect } = React
+const { useRef, useState, useEffect, useCallback } = React
 
 export function useApp() {
   const [chartData, setChartData] = useState({})
@@ -32,6 +32,42 @@ export function useApp() {
 
   const onSubmit = handleSubmit(setFormValues)
 
+  const filterSuccessLogs = useCallback(() => {
+    if (formValues?.status === undefined || formValues?.status.type === 0) {
+      return accessLogs?.successLogs?.map(log =>
+        convertUnixTimestampToDate(log.response_time, 'hour')
+      )
+    }
+
+    if (formValues?.issueType !== undefined) {
+      return []
+    }
+  }, [accessLogs?.successLogs, formValues?.issueType, formValues?.status])
+
+  const filterWarningLogs = useCallback(() => {
+    if (formValues?.status === undefined || formValues?.status.type === 1) {
+      return accessLogs?.warningLogs?.map(log =>
+        convertUnixTimestampToDate(log.response_time, 'hour')
+      )
+    }
+
+    if (formValues?.issueType !== undefined) {
+      return accessLogs?.warningLogs?.filter(log => log.issue_type === formValues?.issueType.type)
+    }
+  }, [accessLogs?.warningLogs, formValues?.issueType, formValues?.status])
+
+  const filterErrorLogs = useCallback(() => {
+    if (formValues?.status === undefined || formValues?.status.type === 2) {
+      return accessLogs?.errorLogs?.map(log =>
+        convertUnixTimestampToDate(log.response_time, 'hour')
+      )
+    }
+
+    if (formValues?.issueType !== undefined) {
+      return accessLogs?.errorLogs?.filter(log => log.issue_type === formValues?.issueType.type)
+    }
+  }, [accessLogs?.errorLogs, formValues?.issueType, formValues?.status])
+
   useEffect(() => {
     const documentStyle = getComputedStyle(document.documentElement)
     const textColor = documentStyle.getPropertyValue('--text-color')
@@ -46,29 +82,19 @@ export function useApp() {
           type: 'bar',
           label: 'Success',
           backgroundColor: documentStyle.getPropertyValue('--green-500'),
-          data:
-            (formValues?.status === undefined || formValues?.status.type === 0) &&
-            accessLogs?.successLogs?.map(log =>
-              convertUnixTimestampToDate(log.response_time, 'hour')
-            )
+          data: filterSuccessLogs()
         },
         {
           type: 'bar',
           label: 'Warning',
           backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
-          data:
-            (formValues?.status === undefined || formValues?.status.type === 1) &&
-            accessLogs?.warningLogs?.map(log =>
-              convertUnixTimestampToDate(log.response_time, 'hour')
-            )
+          data: filterWarningLogs()
         },
         {
           type: 'bar',
           label: 'Error',
           backgroundColor: documentStyle.getPropertyValue('--red-500'),
-          data:
-            (formValues?.status === undefined || formValues?.status.type === 2) &&
-            accessLogs?.errorLogs?.map(log => convertUnixTimestampToDate(log.response_time, 'hour'))
+          data: filterErrorLogs()
         }
       ]
     }
@@ -95,13 +121,7 @@ export function useApp() {
         }
       }
     })
-  }, [
-    accessLogs?.errorLogs,
-    accessLogs?.successLogs,
-    accessLogs?.warningLogs,
-    getValues,
-    formValues
-  ])
+  }, [filterErrorLogs, filterSuccessLogs, filterWarningLogs, getValues])
 
   useEffect(() => {
     refetch()

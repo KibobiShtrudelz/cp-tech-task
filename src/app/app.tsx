@@ -49,12 +49,7 @@ export function App() {
           <Controller
             name="timestampFrom"
             control={control}
-            // rules={{
-            //   required:
-            //     !getValues()?.timestampFrom && getValues()?.timestampTo?.length > 0
-            //       ? 'Use with Timestamp To'
-            //       : false
-            // }}
+            rules={{ required: 'Requis' }}
             render={({ field, fieldState }) => (
               <div>
                 <span className="p-float-label">
@@ -78,12 +73,7 @@ export function App() {
           <Controller
             name="timestampTo"
             control={control}
-            // rules={{
-            //   required:
-            //     !getValues()?.timestampTo && getValues()?.timestampFrom?.length > 0
-            //       ? 'Use with Timestamp From'
-            //       : false
-            // }}
+            rules={{ required: 'Requis' }}
             render={({ field, fieldState }) => (
               <div>
                 {' '}

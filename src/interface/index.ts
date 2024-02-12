@@ -12,8 +12,6 @@ export type FormData = {
   url: string
   status: DropdownOption
   issueType: DropdownOption
-  // status: StatusFilter
-  // issueType: IssueTypeFilter
   timestampFrom: string
   timestampTo: string
   responseTimeFrom: string
