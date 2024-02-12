@@ -7,7 +7,7 @@ import dummyData from './access_logs.json'
 export const fetchAccessLogsByFiltersService = (filters: FormData | undefined) => ({
   queryKey: ['accessLogs'],
   queryFn: async () => {
-    console.log('submited filters >>>', JSON.stringify(filters, null, 2))
+    // console.log('submited filters >>>', JSON.stringify(filters, null, 2))
 
     const successLogs: object[] = []
     const warningLogs: object[] = []
@@ -15,18 +15,19 @@ export const fetchAccessLogsByFiltersService = (filters: FormData | undefined) =
 
     if (filters) {
       // check timestamp filters
-      if (filters.timestamp.from && filters.timestamp.to) {
-        const from = +filters.timestamp.from
-        const to = +filters.timestamp.to
+      if (filters.timestampFrom && filters.timestampTo) {
+        const from = +filters.timestampFrom
+        const to = +filters.timestampTo
 
-        dummyData.forEach((log, i) => {
-          const timestampDate = new Date(log.timestamp)
+        const testingDays: number[] = []
+
+        // In this case the regular for loop is more performant that Array.forEach
+        for (let i = 0; i < dummyData.length; i++) {
+          const log = dummyData[i]
+          const timestampDate = new Date(log.timestamp * 1000) // converting to milliseconds
           const timestampDay = timestampDate.getDate()
 
-          // if (i < 3) {
-          //   console.log('log', log)
-          //   console.log('timestampDay', timestampDay)
-          // }
+          testingDays.push(timestampDay)
 
           switch (log.status) {
             case 0: {
@@ -57,7 +58,9 @@ export const fetchAccessLogsByFiltersService = (filters: FormData | undefined) =
               break
             }
           }
-        })
+        }
+
+        console.log('testingDays', testingDays)
       }
     }
 
