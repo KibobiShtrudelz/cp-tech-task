@@ -55,11 +55,7 @@ export const fetchAccessLogsByFiltersService = (filters: FormData | undefined) =
       }
     }
 
-    return {
-      successLogs,
-      warningLogs,
-      errorLogs
-    }
+    return { successLogs, warningLogs, errorLogs }
   },
   enable: Boolean(filters)
 })

@@ -3,10 +3,17 @@ export type Range = {
   to: string
 }
 
+export type DropdownOption = {
+  type: number
+  name: string
+}
+
 export type FormData = {
   url: string
-  status: StatusFilter
-  issueType: IssueTypeFilter
+  status: DropdownOption
+  issueType: DropdownOption
+  // status: StatusFilter
+  // issueType: IssueTypeFilter
   timestampFrom: string
   timestampTo: string
   responseTimeFrom: string

@@ -14,6 +14,7 @@ export function useApp() {
   const [chartData, setChartData] = useState({})
   const [chartOptions, setChartOptions] = useState({})
   const [formValues, setFormValues] = useState<FormData>()
+  console.log('formValues', formValues)
 
   const { data: accessLogs, refetch } = useQuery(fetchAccessLogsByFiltersService(formValues))
 
@@ -45,30 +46,36 @@ export function useApp() {
           type: 'bar',
           label: 'Success',
           backgroundColor: documentStyle.getPropertyValue('--green-500'),
-          data: accessLogs?.successLogs?.map(log =>
-            convertUnixTimestampToDate(log.response_time, 'hour')
-          )
+          data:
+            (formValues?.status === undefined || formValues?.status.type === 0) &&
+            accessLogs?.successLogs?.map(log =>
+              convertUnixTimestampToDate(log.response_time, 'hour')
+            )
         },
         {
           type: 'bar',
           label: 'Warning',
           backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
-          data: accessLogs?.warningLogs?.map(log =>
-            convertUnixTimestampToDate(log.response_time, 'hour')
-          )
+          data:
+            (formValues?.status === undefined || formValues?.status.type === 1) &&
+            accessLogs?.warningLogs?.map(log =>
+              convertUnixTimestampToDate(log.response_time, 'hour')
+            )
         },
         {
           type: 'bar',
           label: 'Error',
           backgroundColor: documentStyle.getPropertyValue('--red-500'),
-          data: accessLogs?.errorLogs?.map(log =>
-            convertUnixTimestampToDate(log.response_time, 'hour')
-          )
+          data:
+            (formValues?.status === undefined || formValues?.status.type === 2) &&
+            accessLogs?.errorLogs?.map(log => convertUnixTimestampToDate(log.response_time, 'hour'))
         }
       ]
     }
 
-    const options = {
+    setChartData(data)
+
+    setChartOptions({
       maintainAspectRatio: false,
       aspectRatio: 0.8,
       plugins: {
@@ -87,11 +94,14 @@ export function useApp() {
           grid: { color: surfaceBorder }
         }
       }
-    }
-
-    setChartData(data)
-    setChartOptions(options)
-  }, [accessLogs?.errorLogs, accessLogs?.successLogs, accessLogs?.warningLogs, getValues])
+    })
+  }, [
+    accessLogs?.errorLogs,
+    accessLogs?.successLogs,
+    accessLogs?.warningLogs,
+    getValues,
+    formValues
+  ])
 
   useEffect(() => {
     refetch()

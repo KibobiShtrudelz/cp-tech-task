@@ -230,6 +230,16 @@ export function App() {
       <section>
         <Chart type="bar" data={chartData} options={chartOptions} />
       </section>
+
+      <section>
+        <VirtualScroller
+          items={[1, 2, 3, 4, 5]}
+          itemSize={50}
+          // itemTemplate={itemTemplate}
+          className={styles.virtualScroller}
+          style={{ width: '200px', height: '200px' }}
+        />
+      </section>
     </div>
   )
 }
