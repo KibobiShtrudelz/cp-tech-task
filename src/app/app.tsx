@@ -41,7 +41,7 @@ export function App() {
   return (
     <div className={styles.app}>
       <section className={styles.titleSection}>
-        <h1>Crownpeak Tech Task</h1>
+        <h1>Tâche technique Crownpeak</h1>
       </section>
 
       <section className={styles.filterSection}>

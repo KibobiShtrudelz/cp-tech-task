@@ -5,8 +5,8 @@ export type Range = {
 
 export type FormData = {
   url: string
-  status: number
-  issueType: number
+  status: StatusFilter
+  issueType: IssueTypeFilter
   timestampFrom: string
   timestampTo: string
   responseTimeFrom: string

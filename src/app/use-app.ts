@@ -3,10 +3,10 @@ import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
 
-import { getRemainingDays } from '@utils'
+import { FormData } from '@interface'
 import { issueTypes, statusTypes } from '@constants'
 import { fetchAccessLogsByFiltersService } from '@services'
-import { FormData, AccessLog, UrlFilter, StatusFilter, IssueTypeFilter } from '@interface'
+import { convertUnixTimestampToDate, getRemainingDays } from '@utils'
 
 const { useRef, useState, useEffect } = React
 
@@ -16,7 +16,6 @@ export function useApp() {
   const [formValues, setFormValues] = useState<FormData>()
 
   const { data: accessLogs, refetch } = useQuery(fetchAccessLogsByFiltersService(formValues))
-  console.log('accessLogs >>>', accessLogs)
 
   const timestampFromToastRef = useRef(null)
 
@@ -39,7 +38,6 @@ export function useApp() {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border')
 
     const data = {
-      // labels: getDays(+getValues()?.timestampTo - +getValues()?.timestampFrom + 1),
       labels: getRemainingDays({ from: getValues()?.timestampFrom, to: getValues()?.timestampTo }),
 
       datasets: [
@@ -47,22 +45,25 @@ export function useApp() {
           type: 'bar',
           label: 'Success',
           backgroundColor: documentStyle.getPropertyValue('--green-500'),
-          data: accessLogs?.successLogs?.map(log => log.response_time)
-          // data: [50, 25, 12, 48, 90, 76, 42, 33, 45, 65, 22, 45]
+          data: accessLogs?.successLogs?.map(log =>
+            convertUnixTimestampToDate(log.response_time, 'hour')
+          )
         },
         {
           type: 'bar',
           label: 'Warning',
           backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
-          data: accessLogs?.warningLogs?.map(log => log.response_time)
-          // data: [11, 21, 84, 24, 75, 37, 65, 34, 45, 65, 22, 45]
+          data: accessLogs?.warningLogs?.map(log =>
+            convertUnixTimestampToDate(log.response_time, 'hour')
+          )
         },
         {
           type: 'bar',
           label: 'Error',
           backgroundColor: documentStyle.getPropertyValue('--red-500'),
-          data: accessLogs?.errorLogs?.map(log => log.response_time)
-          // data: [41, 52, 24, 74, 23, 21, 32, 45, 65, 22, 45, 33]
+          data: accessLogs?.errorLogs?.map(log =>
+            convertUnixTimestampToDate(log.response_time, 'hour')
+          )
         }
       ]
     }

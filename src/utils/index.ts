@@ -19,3 +19,14 @@ export const getRemainingDays = ({ from, to }: Range) => {
 }
 
 export const getDays = (length: number) => Array.from({ length }, (_, i) => (i + 1).toString())
+
+export const convertUnixTimestampToDate = (timestamp: number, type: 'hour' | 'dayInMonth') => {
+  const date = new Date(timestamp * 1000)
+
+  if (type === 'hour') {
+    // return date.toLocaleTimeString()
+    return date.getHours()
+  }
+
+  return date.getDate()
+}
