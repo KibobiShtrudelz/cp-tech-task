@@ -39,7 +39,8 @@ export function useApp() {
     (logType: 'successLogs' | 'warningLogs' | 'errorLogs') => {
       const logs = Array.from({ length: requestsCountType === 'Day' ? 31 : 24 }, (_, i) => 0)
 
-      return accessLogs?.[logType]?.map(accessLog => {
+
+      accessLogs?.[logType]?.forEach(accessLog => {
         const date = new Date(accessLog.timestamp * 1000)
         const day = date.getDate()
         const hour = date.getHours()
@@ -51,9 +52,9 @@ export function useApp() {
             logs[hour] += 1
           }
         }
-
-        return logs
       })
+
+      return logs
     },
     [accessLogs, chartDay, requestsCountType]
   )
@@ -64,13 +65,6 @@ export function useApp() {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border')
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary')
 
-    const successLogs = filterLogs('successLogs')
-    console.log('successLogs', successLogs)
-    const warningLogs = filterLogs('warningLogs')
-    console.log('warningLogs', warningLogs)
-    const errorLogs = filterLogs('errorLogs')
-    console.log('errorLogs', errorLogs)
-
     const data = {
       labels: getTimeRange(requestsCountType),
 
@@ -79,19 +73,19 @@ export function useApp() {
           type: 'bar',
           label: 'Success',
           backgroundColor: documentStyle.getPropertyValue('--green-500'),
-          data: successLogs?.[0]
+          data: filterLogs('successLogs')
         },
         {
           type: 'bar',
           label: 'Warning',
           backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
-          data: warningLogs?.[0]
+          data: filterLogs('warningLogs')
         },
         {
           type: 'bar',
           label: 'Error',
           backgroundColor: documentStyle.getPropertyValue('--red-500'),
-          data: errorLogs?.[0]
+          data: filterLogs('errorLogs')
         }
       ]
     }
