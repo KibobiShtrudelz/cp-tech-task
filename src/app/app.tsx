@@ -7,7 +7,6 @@ import { InputText } from 'primereact/inputtext'
 import { VirtualScroller } from 'primereact/virtualscroller'
 
 import { getDays } from '@utils'
-import { FormData } from '@interface'
 
 import { useApp } from './use-app'
 
@@ -15,33 +14,26 @@ import styles from './app.module.scss'
 
 export function App() {
   const {
-    errors,
+    // flags
+    control,
     chartDay,
     chartData,
     issueTypes,
     Controller,
     statusTypes,
-    lazyLoading,
     chartOptions,
     requestsCountType,
     filteredAccessLogs,
 
+    // methods
     reset,
-    control,
     onSubmit,
-    onLazyLoad,
     setChartDay,
     getLoadingTemplate,
+    getFormErrorMessage,
     setRequestsCountType,
     getVirtualScrollerItemTemplate
   } = useApp()
-
-  const getFormErrorMessage = (name: keyof FormData) =>
-    errors[name] ? (
-      <small className="p-error">{errors[name]?.message}</small>
-    ) : (
-      <small className="p-error">&nbsp;</small>
-    )
 
   return (
     <div className={styles.app}>
@@ -161,7 +153,7 @@ export function App() {
           <Controller
             name="issueType"
             control={control}
-            render={({ field, fieldState, formState }) => (
+            render={({ field, fieldState }) => (
               <div>
                 <span className="p-float-label">
                   <Dropdown
@@ -171,7 +163,6 @@ export function App() {
                     value={field.value}
                     options={issueTypes}
                     focusInputRef={field.ref}
-                    // disabled={control.getFieldState('status').}
                     className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.value)}
                   />
@@ -250,7 +241,7 @@ export function App() {
             label="Reset"
             severity="secondary"
             className={styles.button}
-            onClick={reset} // @@@ Fix typing
+            onClick={reset as React.MouseEventHandler<HTMLButtonElement>}
           />
 
           <Button className={styles.button} type="submit" label="Submit" />
@@ -259,20 +250,19 @@ export function App() {
 
       <section className={styles.virtualScrollSection}>
         <div className={styles.container}>
-          {filteredAccessLogs && (
+          {filteredAccessLogs ? (
             <VirtualScroller
-              lazy
               showLoader
-              delay={150}
-              itemSize={50}
-              loading={lazyLoading}
-              onLazyLoad={onLazyLoad}
+              delay={250}
+              itemSize={250}
               items={filteredAccessLogs}
-              style={{ minHeight: '500px' }}
+              style={{ height: '500px' }}
               loadingTemplate={getLoadingTemplate}
               itemTemplate={getVirtualScrollerItemTemplate}
-              className={clsx(styles.virtualScroller, 'border-1 surface-border border-round')}
+              className="border-1 surface-border border-round"
             />
+          ) : (
+            <h3>Oups, aucune entrée avec de tels critères :)</h3>
           )}
         </div>
       </section>
