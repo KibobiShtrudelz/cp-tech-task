@@ -14,7 +14,6 @@ export function useApp() {
   const [chartData, setChartData] = useState({})
   const [chartOptions, setChartOptions] = useState({})
   const [formValues, setFormValues] = useState<FormData>()
-  console.log('formValues', formValues)
 
   const { data: accessLogs, refetch } = useQuery(fetchAccessLogsByFiltersService(formValues))
 
@@ -32,17 +31,48 @@ export function useApp() {
 
   const onSubmit = handleSubmit(setFormValues)
 
-  const filterSuccessLogs = useCallback(() => {
-    if (formValues?.status === undefined || formValues?.status.type === 0) {
-      return accessLogs?.successLogs?.map(log =>
-        convertUnixTimestampToDate(log.response_time, 'hour')
-      )
-    }
+  // const filterSuccessLogs = useCallback(() => {
+  //   if (formValues?.status === undefined || formValues?.status.type === 0) {
+  //     return accessLogs?.successLogs?.map(log =>
+  //       convertUnixTimestampToDate(log.response_time, 'hour')
+  //     )
+  //   }
 
-    if (formValues?.issueType !== undefined) {
-      return []
-    }
-  }, [accessLogs?.successLogs, formValues?.issueType, formValues?.status])
+  //   if (formValues?.issueType !== undefined) {
+  //     return []
+  //   }
+  // }, [accessLogs?.successLogs, formValues?.issueType, formValues?.status])
+
+  const filterSuccessLogs = useCallback(
+    () =>
+      accessLogs?.successLogs?.map(log => {
+        if (
+          formValues?.status === undefined ||
+          formValues?.status.type === 0 ||
+          (formValues?.issueType !== undefined && log.issue_type === formValues?.issueType.type) ||
+          (formValues?.url !== undefined && log.url.includes(formValues?.url)) || // трябва да сгблобя baseUrl + всеки параметър, т.е. махам стойностите на параметрите
+          (formValues?.responseTimeFrom !== undefined &&
+            log.response_time >= +formValues?.responseTimeFrom) ||
+          (formValues?.responseTimeTo !== undefined &&
+            log.response_time <= +formValues?.responseTimeTo)
+        ) {
+          return convertUnixTimestampToDate(log.response_time, 'hour')
+        }
+
+        return accessLogs?.successLogs?.map(log =>
+          convertUnixTimestampToDate(log.response_time, 'hour')
+        )
+      }),
+
+    [
+      accessLogs?.successLogs,
+      formValues?.issueType,
+      formValues?.responseTimeFrom,
+      formValues?.responseTimeTo,
+      formValues?.status,
+      formValues?.url
+    ]
+  )
 
   const filterWarningLogs = useCallback(() => {
     if (formValues?.status === undefined || formValues?.status.type === 1) {
