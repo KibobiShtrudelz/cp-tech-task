@@ -12,6 +12,7 @@ import { FormData } from '@interface'
 import { useApp } from './use-app'
 
 import styles from './app.module.scss'
+import { Divider } from 'primereact/divider'
 
 export function App() {
   const {
@@ -19,16 +20,20 @@ export function App() {
     control,
     register,
     setValue,
+    chartDay,
     chartData,
     getValues,
     issueTypes,
     accessLogs,
     statusTypes,
     chartOptions,
+    requestsCountType,
     timestampFromToastRef,
 
     reset,
-    onSubmit
+    onSubmit,
+    setChartDay,
+    setRequestsCountType
   } = useApp()
 
   const getFormErrorMessage = (name: keyof FormData) =>
@@ -44,7 +49,43 @@ export function App() {
         <h1>Tâche technique Crownpeak</h1>
       </section>
 
+      <section className={styles.chartFiltersWrapper}>
+        <div className={styles.chartFilters}>
+          <span className="p-float-label">
+            <Dropdown
+              id="requestsCountType"
+              value={requestsCountType}
+              options={['Day', 'Hour']}
+              className={styles.chartDropdown}
+              onChange={e => setRequestsCountType(e.value)}
+            />
+            <label htmlFor="requestsCountType">Requests Count Per</label>
+          </span>
+
+          {requestsCountType === 'Hour' && (
+            <span className="p-float-label">
+              <Dropdown
+                id="requestsCountDay"
+                value={chartDay}
+                options={getDays(31)}
+                className={styles.chartDropdown}
+                onChange={e => setChartDay(e.value)}
+              />
+              <label htmlFor="requestsCountDay">Select Day of Month</label>
+            </span>
+          )}
+        </div>
+
+        <Chart type="bar" data={chartData} options={chartOptions} />
+
+        <Divider />
+      </section>
+
       <section className={styles.filterSection}>
+        <h1>Virtual Scroll Filters</h1>
+
+        <Divider />
+
         <form onSubmit={onSubmit}>
           <Controller
             name="timestampFrom"
@@ -62,7 +103,7 @@ export function App() {
                     className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.value)}
                   />
-                  <label htmlFor="dd-filter">Timestamp From day</label>
+                  <label htmlFor="timestampFrom">Timestamp From day</label>
                 </span>
 
                 {getFormErrorMessage('timestampFrom')}
@@ -88,7 +129,7 @@ export function App() {
                     onChange={e => field.onChange(e.value)}
                   />
 
-                  <label htmlFor="dd-filter">Timestamp To day</label>
+                  <label htmlFor="timestampTo">Timestamp To day</label>
                 </span>
                 {getFormErrorMessage('timestampTo')}
               </div>
@@ -111,7 +152,7 @@ export function App() {
                     className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.value)}
                   />
-                  <label htmlFor="dd-filter">Status</label>
+                  <label htmlFor="status">Status</label>
                 </span>
 
                 {getFormErrorMessage('status')}
@@ -135,7 +176,7 @@ export function App() {
                     className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.value)}
                   />
-                  <label htmlFor="dd-filter">Issue Type</label>
+                  <label htmlFor="issueType">Issue Type</label>
                 </span>
 
                 {getFormErrorMessage('issueType')}
@@ -215,10 +256,6 @@ export function App() {
 
           <Button className={styles.button} type="submit" label="Submit" />
         </form>
-      </section>
-
-      <section>
-        <Chart type="bar" data={chartData} options={chartOptions} />
       </section>
 
       <section>
