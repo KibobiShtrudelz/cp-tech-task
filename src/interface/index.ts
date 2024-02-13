@@ -33,6 +33,12 @@ export type AccessLog = {
   issue_type?: IssueTypeFilter
 }
 
+export type LogsByTypes = {
+  successLogs: AccessLog[]
+  warningLogs: AccessLog[]
+  errorLogs: AccessLog[]
+}
+
 export type RequestsType = 'Day' | 'Hour'
 
 export type ChartDay =

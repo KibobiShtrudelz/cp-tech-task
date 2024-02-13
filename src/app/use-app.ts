@@ -3,9 +3,9 @@ import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
 
+import { getTimeRange } from '@utils'
 import { FormData, ChartDay } from '@interface'
 import { issueTypes, statusTypes } from '@constants'
-import { convertUnixTimestamp, getTimeRange } from '@utils'
 import { fetchRequestsCountService, fetchAccessLogsByFiltersService } from '@services'
 
 const { useRef, useState, useEffect, useCallback } = React
@@ -19,7 +19,9 @@ export function useApp() {
 
   // const { data: accessLogs, refetch } = useQuery(fetchAccessLogsByFiltersService(formValues))
 
-  const { data: accessLogs } = useQuery(fetchRequestsCountService())
+  const { data: accessLogs, refetch } = useQuery(
+    fetchRequestsCountService(requestsCountType, +chartDay)
+  )
 
   const timestampFromToastRef = useRef(null)
 
@@ -35,30 +37,6 @@ export function useApp() {
 
   const onSubmit = handleSubmit(setFormValues)
 
-  const filterLogs = useCallback(
-    (logType: 'successLogs' | 'warningLogs' | 'errorLogs') => {
-      const logs = Array.from({ length: requestsCountType === 'Day' ? 31 : 24 }, (_, i) => 0)
-
-
-      accessLogs?.[logType]?.forEach(accessLog => {
-        const date = new Date(accessLog.timestamp * 1000)
-        const day = date.getDate()
-        const hour = date.getHours()
-
-        if (requestsCountType === 'Day') {
-          logs[day - 1] += 1
-        } else {
-          if (day === +chartDay) {
-            logs[hour] += 1
-          }
-        }
-      })
-
-      return logs
-    },
-    [accessLogs, chartDay, requestsCountType]
-  )
-
   useEffect(() => {
     const documentStyle = getComputedStyle(document.documentElement)
     const textColor = documentStyle.getPropertyValue('--text-color')
@@ -73,19 +51,22 @@ export function useApp() {
           type: 'bar',
           label: 'Success',
           backgroundColor: documentStyle.getPropertyValue('--green-500'),
-          data: filterLogs('successLogs')
+          data: accessLogs?.successLogs
+          // data: filterLogs('successLogs')
         },
         {
           type: 'bar',
           label: 'Warning',
           backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
-          data: filterLogs('warningLogs')
+          data: accessLogs?.warningLogs
+          // data: filterLogs('warningLogs')
         },
         {
           type: 'bar',
           label: 'Error',
           backgroundColor: documentStyle.getPropertyValue('--red-500'),
-          data: filterLogs('errorLogs')
+          data: accessLogs?.errorLogs
+          // data: filterLogs('errorLogs')
         }
       ]
     }
@@ -112,7 +93,11 @@ export function useApp() {
         }
       }
     })
-  }, [filterLogs, requestsCountType])
+  }, [accessLogs?.errorLogs, accessLogs?.successLogs, accessLogs?.warningLogs, requestsCountType])
+
+  useEffect(() => {
+    refetch()
+  }, [chartDay, requestsCountType, refetch])
 
   return {
     errors,

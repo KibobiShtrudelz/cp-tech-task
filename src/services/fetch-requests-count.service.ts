@@ -1,14 +1,16 @@
-import { AccessLog } from '@interface'
+import { AccessLog, LogsByTypes, RequestsType } from '@interface'
 
 import dummyData from './access_logs.json'
 
 // Theis service is used to mimic data fetching from the server
-export const fetchRequestsCountService = () => ({
+export const fetchRequestsCountService = (type: RequestsType, selectedDay?: number) => ({
   queryKey: ['requestsCount'],
   queryFn: async () => {
-    const successLogs: AccessLog[] = []
-    const warningLogs: AccessLog[] = []
-    const errorLogs: AccessLog[] = []
+    const logsByTypes: LogsByTypes = {
+      successLogs: [],
+      warningLogs: [],
+      errorLogs: []
+    }
 
     // In this case the regular for loop is more performant that Array.forEach
     for (let i = 0; i < dummyData.length; i++) {
@@ -16,17 +18,17 @@ export const fetchRequestsCountService = () => ({
 
       switch (log.status) {
         case 0: {
-          successLogs.push(log as AccessLog)
+          logsByTypes.successLogs.push(log as AccessLog)
           break
         }
 
         case 1: {
-          warningLogs.push(log as AccessLog)
+          logsByTypes.warningLogs.push(log as AccessLog)
           break
         }
 
         case 2: {
-          errorLogs.push(log as AccessLog)
+          logsByTypes.errorLogs.push(log as AccessLog)
           break
         }
 
@@ -36,6 +38,30 @@ export const fetchRequestsCountService = () => ({
       }
     }
 
-    return { successLogs, warningLogs, errorLogs }
+    const filterLogs = (logType: 'successLogs' | 'warningLogs' | 'errorLogs') => {
+      const logs = Array.from({ length: type === 'Day' ? 31 : 24 }, (_, i) => 0)
+
+      logsByTypes?.[logType]?.forEach(accessLog => {
+        const date = new Date(accessLog.timestamp * 1000)
+        const day = date.getDate()
+        const hour = date.getHours()
+
+        if (type === 'Day') {
+          logs[day - 1] += 1
+        } else {
+          if (selectedDay && day === selectedDay) {
+            logs[hour] += 1
+          }
+        }
+      })
+
+      return logs
+    }
+
+    return {
+      successLogs: filterLogs('successLogs'),
+      warningLogs: filterLogs('warningLogs'),
+      errorLogs: filterLogs('errorLogs')
+    }
   }
 })
