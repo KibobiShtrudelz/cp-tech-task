@@ -84,8 +84,6 @@ export function App() {
       <section className={styles.filterSection}>
         <h1>Virtual Scroll Filters</h1>
 
-        <Divider />
-
         <form onSubmit={onSubmit}>
           <Controller
             name="timestampFrom"

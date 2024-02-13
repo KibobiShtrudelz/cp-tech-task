@@ -10,7 +10,8 @@ import { App } from './app/app'
 
 import { store } from './redux/store'
 
-import 'primereact/resources/themes/saga-purple/theme.css'
+import 'primereact/resources/themes/saga-blue/theme.css'
+// import 'primereact/resources/themes/saga-purple/theme.css'
 
 import 'primeicons/primeicons.css'
 import '/node_modules/primeflex/primeflex.css'
