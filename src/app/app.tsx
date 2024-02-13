@@ -262,7 +262,7 @@ export function App() {
             <VirtualScroller
               lazy
               showLoader
-              delay={200}
+              delay={150}
               itemSize={50}
               loading={lazyLoading}
               onLazyLoad={onLazyLoad}
