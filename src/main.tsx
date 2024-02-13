@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { App } from './app/app'
 
-import 'primereact/resources/themes/saga-blue/theme.css'
+import 'primereact/resources/themes/lara-dark-blue/theme.css'
 
 import 'primeicons/primeicons.css'
 import '/node_modules/primeflex/primeflex.css'

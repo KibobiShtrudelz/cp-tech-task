@@ -46,11 +46,14 @@ export function App() {
           <span className="p-float-label">
             <Dropdown
               id="requestsCountType"
+              name="requestsCountType"
+              inputId="requestsCountType"
               value={requestsCountType}
               options={['Day', 'Hour']}
               className={styles.chartDropdown}
               onChange={e => setRequestsCountType(e.value)}
             />
+
             <label htmlFor="requestsCountType">Requests Count Per</label>
           </span>
 
@@ -58,11 +61,14 @@ export function App() {
             <span className="p-float-label">
               <Dropdown
                 id="requestsCountDay"
+                name="requestsCountDay"
+                inputId="requestsCountDay"
                 value={chartDay}
                 options={getDays(31)}
                 className={styles.chartDropdown}
                 onChange={e => setChartDay(e.value)}
               />
+
               <label htmlFor="requestsCountDay">Select Day of Month</label>
             </span>
           )}
@@ -87,13 +93,16 @@ export function App() {
                   <Dropdown
                     showClear
                     id={field.name}
+                    name={field.name}
+                    inputId={field.name}
                     value={field.value}
                     options={getDays(31)}
                     focusInputRef={field.ref}
                     className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.value)}
                   />
-                  <label htmlFor="timestampFrom">Timestamp From day</label>
+
+                  <label htmlFor={field.name}>Timestamp From day</label>
                 </span>
 
                 {getFormErrorMessage('timestampFrom')}
@@ -112,6 +121,8 @@ export function App() {
                   <Dropdown
                     showClear
                     id={field.name}
+                    name={field.name}
+                    inputId={field.name}
                     value={field.value}
                     options={getDays(31)}
                     focusInputRef={field.ref}
@@ -119,7 +130,7 @@ export function App() {
                     onChange={e => field.onChange(e.value)}
                   />
 
-                  <label htmlFor="timestampTo">Timestamp To day</label>
+                  <label htmlFor={field.name}>Timestamp To day</label>
                 </span>
                 {getFormErrorMessage('timestampTo')}
               </div>
@@ -135,6 +146,8 @@ export function App() {
                   <Dropdown
                     showClear
                     id={field.name}
+                    name={field.name}
+                    inputId={field.name}
                     optionLabel="name"
                     value={field.value}
                     options={statusTypes}
@@ -142,7 +155,8 @@ export function App() {
                     className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.value)}
                   />
-                  <label htmlFor="status">Status</label>
+
+                  <label htmlFor={field.name}>Status</label>
                 </span>
 
                 {getFormErrorMessage('status')}
@@ -159,6 +173,8 @@ export function App() {
                   <Dropdown
                     showClear
                     id={field.name}
+                    name={field.name}
+                    inputId={field.name}
                     optionLabel="name"
                     value={field.value}
                     options={issueTypes}
@@ -166,7 +182,8 @@ export function App() {
                     className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.value)}
                   />
-                  <label htmlFor="issueType">Issue Type</label>
+
+                  <label htmlFor={field.name}>Issue Type</label>
                 </span>
 
                 {getFormErrorMessage('issueType')}
@@ -182,10 +199,12 @@ export function App() {
                 <span className="p-float-label">
                   <InputText
                     id={field.name}
+                    name={field.name}
                     value={field.value || ''}
                     className={clsx(fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.target.value)}
                   />
+
                   <label htmlFor={field.name}>URL</label>
                 </span>
 
@@ -203,10 +222,12 @@ export function App() {
                   <InputText
                     keyfilter="int"
                     id={field.name}
+                    name={field.name}
                     value={field.value || ''}
                     className={clsx(fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.target.value)}
                   />
+
                   <label htmlFor={field.name}>Response time From</label>
                 </span>
 
@@ -224,10 +245,12 @@ export function App() {
                   <InputText
                     keyfilter="int"
                     id={field.name}
+                    name={field.name}
                     value={field.value || ''}
                     className={clsx(fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.target.value)}
                   />
+
                   <label htmlFor={field.name}>Response time To</label>
                 </span>
 
@@ -254,7 +277,7 @@ export function App() {
             <VirtualScroller
               showLoader
               delay={250}
-              itemSize={250}
+              itemSize={230}
               items={filteredAccessLogs}
               style={{ height: '500px' }}
               loadingTemplate={getLoadingTemplate}

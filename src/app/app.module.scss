@@ -9,9 +9,6 @@
   padding: 16px;
   overflow-y: auto;
   border-radius: 6px;
-  background-color: #fff;
-  border: 1px solid #e7e8eb;
-  box-shadow: -6px 4px 14px -6px #b2b3b4;
 
   section {
     &.titleSection {
@@ -67,7 +64,7 @@
             justify-content: space-between;
 
             width: 100%;
-            padding-inline: 10px;
+            padding: 10px;
 
             span {
               &:first-child {

@@ -63,7 +63,6 @@ export const fetchAccessLogsByFiltersService = (
         }
       }) // Filtered by responseTime
 
-    console.log('filteredAccessLogs >>>', filteredAccessLogs)
     return filteredAccessLogs
   },
   enable: Boolean(filters)

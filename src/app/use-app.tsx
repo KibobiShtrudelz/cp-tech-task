@@ -12,7 +12,6 @@ import { FormData, ChartDay, AccessLog } from '@interface'
 import { fetchRequestsCountService, fetchAccessLogsByFiltersService } from '@services'
 
 import styles from './app.module.scss'
-import { Divider } from 'primereact/divider'
 
 const { useState, useEffect, useCallback } = React
 
@@ -55,28 +54,20 @@ export function useApp() {
           <span>{item.timestamp}</span>
         </div>
 
-        <Divider />
-
         <div className={styles.row}>
           <span>Status:</span>
           <span>{item.status}</span>
         </div>
-
-        <Divider />
 
         <div className={styles.row}>
           <span>Response time:</span>
           <span>{item.response_time}</span>
         </div>
 
-        <Divider />
-
         <div className={styles.row}>
           <span>Issue Type:</span>
           <span>{item.issue_type}</span>
         </div>
-
-        <Divider />
 
         <div className={styles.row}>
           <span>URL:</span>
