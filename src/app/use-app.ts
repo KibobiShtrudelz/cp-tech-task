@@ -39,6 +39,7 @@ export function useApp() {
     (logType: 'successLogs' | 'warningLogs' | 'errorLogs') => {
       const logs = Array.from({ length: requestsCountType === 'Day' ? 31 : 24 }, (_, i) => 0)
 
+
       accessLogs?.[logType]?.forEach(accessLog => {
         const date = new Date(accessLog.timestamp * 1000)
         const day = date.getDate()
