@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import { Chart } from 'primereact/chart'
 import { Button } from 'primereact/button'
-import { Controller } from 'react-hook-form'
 import { Divider } from 'primereact/divider'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
@@ -17,10 +16,10 @@ import styles from './app.module.scss'
 export function App() {
   const {
     errors,
-    control,
     chartDay,
     chartData,
     issueTypes,
+    Controller,
     statusTypes,
     lazyLoading,
     chartOptions,
@@ -28,6 +27,7 @@ export function App() {
     filteredAccessLogs,
 
     reset,
+    control,
     onSubmit,
     onLazyLoad,
     setChartDay,
@@ -161,7 +161,7 @@ export function App() {
           <Controller
             name="issueType"
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field, fieldState, formState }) => (
               <div>
                 <span className="p-float-label">
                   <Dropdown
@@ -171,6 +171,7 @@ export function App() {
                     value={field.value}
                     options={issueTypes}
                     focusInputRef={field.ref}
+                    // disabled={control.getFieldState('status').}
                     className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
                     onChange={e => field.onChange(e.value)}
                   />
@@ -267,7 +268,7 @@ export function App() {
               loading={lazyLoading}
               onLazyLoad={onLazyLoad}
               items={filteredAccessLogs}
-              style={{ height: '500px' }}
+              style={{ minHeight: '500px' }}
               loadingTemplate={getLoadingTemplate}
               itemTemplate={getVirtualScrollerItemTemplate}
               className={clsx(styles.virtualScroller, 'border-1 surface-border border-round')}

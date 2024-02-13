@@ -30,7 +30,30 @@ export const fetchAccessLogsByFiltersService = (
         return timestampDay >= from && timestampDay <= to
       }) // Filtered by timestamp
       .filter(log => status === undefined || status.type === log.status) // Filtered by status
-      .filter(log => issueType === undefined || issueType.type === log.issue_type) // Filtered by issueType
+      .filter(log => {
+        // issueType === undefined
+        //   ? true
+        //   : issueType.type === 0
+        //     ? log.issue_type === undefined
+        //     : log.issue_type === issueType.type
+
+        if (log.status === 0 || issueType === undefined || issueType.type === log?.issue_type) {
+          return true
+        }
+
+        return false
+
+        /**
+             * IF() version:
+              if (issueType === undefined) {
+                 return true
+               } else if (issueType.type === 0) {
+                 return log.issue_type === undefined
+               } else {
+                 return log.issue_type === issueType.type
+               }
+             */
+      }) // Filtered by issueType
       .filter(log => {
         if (url === undefined) {
           return true
@@ -61,6 +84,7 @@ export const fetchAccessLogsByFiltersService = (
         }
       }) // Filtered by responseTime
 
+    console.log('filteredAccessLogs >>>', filteredAccessLogs)
     return filteredAccessLogs
   },
   enable: Boolean(filters)

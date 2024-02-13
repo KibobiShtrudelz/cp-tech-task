@@ -1,13 +1,13 @@
 import * as React from 'react'
 
 import clsx from 'clsx'
-import { useForm } from 'react-hook-form'
-import { Skeleton } from 'primereact/skeleton'
-import { useQuery } from '@tanstack/react-query'
 import {
   VirtualScrollerLazyEvent,
   VirtualScrollerTemplateOptions
 } from 'primereact/virtualscroller'
+import { Skeleton } from 'primereact/skeleton'
+import { useQuery } from '@tanstack/react-query'
+import { useForm, Controller, useFieldArray } from 'react-hook-form'
 
 import { getTimeRange } from '@utils'
 import { issueTypes, statusTypes } from '@constants'
@@ -46,9 +46,13 @@ export function useApp() {
     control,
     register,
     setValue,
-    getValues,
     handleSubmit
-  } = useForm<FormData>()
+  } = useForm<FormData>({
+    shouldFocusError: true
+  })
+
+  const { fields } = useFieldArray({ control, name: 'status' })
+  console.log('fields', fields)
 
   const onSubmit = handleSubmit(setFormValues)
 
@@ -206,11 +210,11 @@ export function useApp() {
     control,
     register,
     setValue,
-    chartData,
-    getValues,
     chartDay,
+    chartData,
     issueTypes,
     accessLogs,
+    Controller,
     statusTypes,
     lazyLoading,
     chartOptions,
