@@ -1,32 +1,30 @@
-import { Range } from '@interface'
+import { RequestsType } from '@interface'
 
-export const getRemainingDays = ({ from, to }: Range) => {
-  const days = +to - +from + 1
-  let daysToReturn = days
-  /**
-   * тук има да се работи, защото като филтрирам от 1-ви до 5-ти ден, 5-я ден ми е само в warningLogs, а като
-   * филтрирам от 1-ви до 31-ви 5-я ден ми е само в errorLogs
-   */
+// export const getRemainingDays = ({ from, to }: Range) => {
+//   const days = +to - +from + 1
+//   let daysToReturn = days
 
-  return (
-    daysToReturn !== 0 &&
-    Array.from({ length: days }, (_, i) => {
-      daysToReturn -= 1
-      return i + +from
-      // return (+from + 1).toString()
-    })
-  )
-}
+//   return (
+//     daysToReturn !== 0 &&
+//     Array.from({ length: days }, (_, i) => {
+//       daysToReturn -= 1
+//       return i + +from
+//     })
+//   )
+// }
 
 export const getDays = (length: number) => Array.from({ length }, (_, i) => (i + 1).toString())
 
-export const convertUnixTimestampToDate = (timestamp: number, type: 'hour' | 'dayInMonth') => {
+export const convertUnixTimestamp = (timestamp: number, type: RequestsType) => {
   const date = new Date(timestamp * 1000)
-
-  if (type === 'hour') {
-    // return date.toLocaleTimeString()
-    return date.getHours()
-  }
-
-  return date.getDate()
+  return type === 'Day' ? date.getDate() : date.getHours()
 }
+
+export const getTimeRange = (type: RequestsType) =>
+  Array.from(
+    { length: type === 'Day' ? 31 : 24 },
+    (_, i) =>
+      `${type === 'Day' ? 'Day ' : ''}` +
+      (i + 1).toString() +
+      `${type === 'Hour' ? (i + 1 < 12 || i + 1 === 24 ? 'AM' : 'PM') : ''} `
+  )

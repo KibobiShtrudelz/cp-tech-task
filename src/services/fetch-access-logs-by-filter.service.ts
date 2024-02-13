@@ -1,7 +1,7 @@
 import { AccessLog, FormData } from '@interface'
 
 import dummyData from './access_logs.json'
-import { convertUnixTimestampToDate } from '@utils'
+import { convertUnixTimestamp } from '@utils'
 
 // Theis service is used to mimic data fetching from the server
 // In this case, we're using the dummy data and client calculations to simulate a server response
@@ -13,6 +13,7 @@ export const fetchAccessLogsByFiltersService = (filters: FormData | undefined) =
     const errorLogs: AccessLog[] = []
 
     if (filters) {
+      // Виж дали не може да махнеш if (filters), защото вече проверяваш с "enable: Boolean(filters)"
       if (filters.timestampFrom && filters.timestampTo) {
         const from = +filters.timestampFrom
         const to = +filters.timestampTo
@@ -20,7 +21,7 @@ export const fetchAccessLogsByFiltersService = (filters: FormData | undefined) =
         // In this case the regular for loop is more performant that Array.forEach
         for (let i = 0; i < dummyData.length; i++) {
           const log = dummyData[i]
-          const timestampDay = convertUnixTimestampToDate(log.timestamp, 'dayInMonth')
+          const timestampDay = convertUnixTimestamp(log.timestamp, 'Day')
 
           switch (log.status) {
             case 0: {

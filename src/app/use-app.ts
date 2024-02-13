@@ -3,10 +3,10 @@ import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
 
-import { FormData } from '@interface'
+import { FormData, ChartDay } from '@interface'
 import { issueTypes, statusTypes } from '@constants'
-import { fetchAccessLogsByFiltersService } from '@services'
-import { convertUnixTimestampToDate, getRemainingDays } from '@utils'
+import { convertUnixTimestamp, getTimeRange } from '@utils'
+import { fetchRequestsCountService, fetchAccessLogsByFiltersService } from '@services'
 
 const { useRef, useState, useEffect, useCallback } = React
 
@@ -14,8 +14,12 @@ export function useApp() {
   const [chartData, setChartData] = useState({})
   const [chartOptions, setChartOptions] = useState({})
   const [formValues, setFormValues] = useState<FormData>()
+  const [chartDay, setChartDay] = useState<ChartDay>('1')
+  const [requestsCountType, setRequestsCountType] = useState<'Day' | 'Hour'>('Day')
 
-  const { data: accessLogs, refetch } = useQuery(fetchAccessLogsByFiltersService(formValues))
+  // const { data: accessLogs, refetch } = useQuery(fetchAccessLogsByFiltersService(formValues))
+
+  const { data: accessLogs } = useQuery(fetchRequestsCountService())
 
   const timestampFromToastRef = useRef(null)
 
@@ -31,100 +35,63 @@ export function useApp() {
 
   const onSubmit = handleSubmit(setFormValues)
 
-  // const filterSuccessLogs = useCallback(() => {
-  //   if (formValues?.status === undefined || formValues?.status.type === 0) {
-  //     return accessLogs?.successLogs?.map(log =>
-  //       convertUnixTimestampToDate(log.response_time, 'hour')
-  //     )
-  //   }
+  const filterLogs = useCallback(
+    (logType: 'successLogs' | 'warningLogs' | 'errorLogs') => {
+      const logs = Array.from({ length: requestsCountType === 'Day' ? 31 : 24 }, (_, i) => 0)
 
-  //   if (formValues?.issueType !== undefined) {
-  //     return []
-  //   }
-  // }, [accessLogs?.successLogs, formValues?.issueType, formValues?.status])
+      return accessLogs?.[logType]?.map(accessLog => {
+        const date = new Date(accessLog.timestamp * 1000)
+        const day = date.getDate()
+        const hour = date.getHours()
 
-  const filterSuccessLogs = useCallback(
-    () =>
-      accessLogs?.successLogs?.map(log => {
-        if (
-          formValues?.status === undefined ||
-          formValues?.status.type === 0 ||
-          (formValues?.issueType !== undefined && log.issue_type === formValues?.issueType.type) ||
-          (formValues?.url !== undefined && log.url.includes(formValues?.url)) || // трябва да сгблобя baseUrl + всеки параметър, т.е. махам стойностите на параметрите
-          (formValues?.responseTimeFrom !== undefined &&
-            log.response_time >= +formValues?.responseTimeFrom) ||
-          (formValues?.responseTimeTo !== undefined &&
-            log.response_time <= +formValues?.responseTimeTo)
-        ) {
-          return convertUnixTimestampToDate(log.response_time, 'hour')
+        if (requestsCountType === 'Day') {
+          logs[day - 1] += 1
+        } else {
+          if (day === +chartDay) {
+            logs[hour] += 1
+          }
         }
 
-        return accessLogs?.successLogs?.map(log =>
-          convertUnixTimestampToDate(log.response_time, 'hour')
-        )
-      }),
-
-    [
-      accessLogs?.successLogs,
-      formValues?.issueType,
-      formValues?.responseTimeFrom,
-      formValues?.responseTimeTo,
-      formValues?.status,
-      formValues?.url
-    ]
+        return logs
+      })
+    },
+    [accessLogs, chartDay, requestsCountType]
   )
-
-  const filterWarningLogs = useCallback(() => {
-    if (formValues?.status === undefined || formValues?.status.type === 1) {
-      return accessLogs?.warningLogs?.map(log =>
-        convertUnixTimestampToDate(log.response_time, 'hour')
-      )
-    }
-
-    if (formValues?.issueType !== undefined) {
-      return accessLogs?.warningLogs?.filter(log => log.issue_type === formValues?.issueType.type)
-    }
-  }, [accessLogs?.warningLogs, formValues?.issueType, formValues?.status])
-
-  const filterErrorLogs = useCallback(() => {
-    if (formValues?.status === undefined || formValues?.status.type === 2) {
-      return accessLogs?.errorLogs?.map(log =>
-        convertUnixTimestampToDate(log.response_time, 'hour')
-      )
-    }
-
-    if (formValues?.issueType !== undefined) {
-      return accessLogs?.errorLogs?.filter(log => log.issue_type === formValues?.issueType.type)
-    }
-  }, [accessLogs?.errorLogs, formValues?.issueType, formValues?.status])
 
   useEffect(() => {
     const documentStyle = getComputedStyle(document.documentElement)
     const textColor = documentStyle.getPropertyValue('--text-color')
-    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary')
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border')
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary')
+
+    const successLogs = filterLogs('successLogs')
+    console.log('successLogs', successLogs)
+    const warningLogs = filterLogs('warningLogs')
+    console.log('warningLogs', warningLogs)
+    const errorLogs = filterLogs('errorLogs')
+    console.log('errorLogs', errorLogs)
 
     const data = {
-      labels: getRemainingDays({ from: getValues()?.timestampFrom, to: getValues()?.timestampTo }),
+      labels: getTimeRange(requestsCountType),
 
       datasets: [
         {
           type: 'bar',
           label: 'Success',
           backgroundColor: documentStyle.getPropertyValue('--green-500'),
-          data: filterSuccessLogs()
+          data: successLogs?.[0]
         },
         {
           type: 'bar',
           label: 'Warning',
           backgroundColor: documentStyle.getPropertyValue('--yellow-500'),
-          data: filterWarningLogs()
+          data: warningLogs?.[0]
         },
         {
           type: 'bar',
           label: 'Error',
           backgroundColor: documentStyle.getPropertyValue('--red-500'),
-          data: filterErrorLogs()
+          data: errorLogs?.[0]
         }
       ]
     }
@@ -151,11 +118,7 @@ export function useApp() {
         }
       }
     })
-  }, [filterErrorLogs, filterSuccessLogs, filterWarningLogs, getValues])
-
-  useEffect(() => {
-    refetch()
-  }, [formValues, refetch])
+  }, [filterLogs, requestsCountType])
 
   return {
     errors,
@@ -164,13 +127,17 @@ export function useApp() {
     setValue,
     chartData,
     getValues,
+    chartDay,
     issueTypes,
     accessLogs,
     statusTypes,
     chartOptions,
+    requestsCountType,
     timestampFromToastRef,
 
     reset,
-    onSubmit
+    onSubmit,
+    setChartDay,
+    setRequestsCountType
   }
 }

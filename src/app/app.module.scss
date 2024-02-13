@@ -16,6 +16,17 @@
   section {
     &.titleSection {
       text-align: center;
+      margin-bottom: 24px;
+    }
+
+    &.chartFiltersWrapper {
+      display: flex;
+      flex-direction: column;
+
+      .chartFilters {
+        display: flex;
+        gap: 24px;
+      }
     }
 
     &.filterSection {
@@ -34,6 +45,10 @@
           height: 38px;
         }
       }
+    }
+
+    .chartDropdown {
+      width: 200px;
     }
 
     .virtualScroller {
