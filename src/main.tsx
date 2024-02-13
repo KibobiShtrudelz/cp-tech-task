@@ -13,6 +13,7 @@ import { store } from './redux/store'
 import 'primereact/resources/themes/saga-purple/theme.css'
 
 import 'primeicons/primeicons.css'
+import '/node_modules/primeflex/primeflex.css'
 
 const queryClient = new QueryClient()
 

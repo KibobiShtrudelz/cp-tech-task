@@ -30,6 +30,11 @@
     }
 
     &.filterSection {
+      h1 {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
       form {
         display: flex;
         row-gap: 26px;
@@ -43,6 +48,31 @@
         .button {
           width: 100px;
           height: 38px;
+        }
+      }
+    }
+
+    &.virtualScrollSection {
+      .container {
+        padding-inline: 15%;
+
+        .virtualScrollerItemWrapper {
+          display: flex;
+          flex-direction: column;
+
+          .row {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+
+            span {
+              &:first-child {
+                font-weight: 600;
+              }
+            }
+          }
         }
       }
     }

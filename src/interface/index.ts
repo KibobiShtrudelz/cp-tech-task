@@ -18,6 +18,16 @@ export type FormData = {
   responseTimeTo: string
 }
 
+export type FetchAccessLogsByFiltersServiceProps = {
+  url?: string
+  status?: DropdownOption
+  issueType?: DropdownOption
+  timestampFrom?: string
+  timestampTo?: string
+  responseTimeFrom?: string
+  responseTimeTo?: string
+}
+
 export type UrlFilter = string
 
 export type StatusFilter = 0 | 1 | 2

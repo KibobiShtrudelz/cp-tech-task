@@ -2,7 +2,8 @@ import { AccessLog, LogsByTypes, RequestsType } from '@interface'
 
 import dummyData from './access_logs.json'
 
-// Theis service is used to mimic data fetching from the server
+// This service is used to mimic data fetching from a server
+// All of this logfics should be done in the backend
 export const fetchRequestsCountService = (type: RequestsType, selectedDay?: number) => ({
   queryKey: ['requestsCount'],
   queryFn: async () => {

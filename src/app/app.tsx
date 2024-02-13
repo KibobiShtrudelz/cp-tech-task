@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { Chart } from 'primereact/chart'
 import { Button } from 'primereact/button'
 import { Controller } from 'react-hook-form'
+import { Divider } from 'primereact/divider'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import { VirtualScroller } from 'primereact/virtualscroller'
@@ -12,28 +13,27 @@ import { FormData } from '@interface'
 import { useApp } from './use-app'
 
 import styles from './app.module.scss'
-import { Divider } from 'primereact/divider'
 
 export function App() {
   const {
     errors,
     control,
-    register,
-    setValue,
     chartDay,
     chartData,
-    getValues,
     issueTypes,
-    accessLogs,
     statusTypes,
+    lazyLoading,
     chartOptions,
     requestsCountType,
-    timestampFromToastRef,
+    filteredAccessLogs,
 
     reset,
     onSubmit,
+    onLazyLoad,
     setChartDay,
-    setRequestsCountType
+    getLoadingTemplate,
+    setRequestsCountType,
+    getVirtualScrollerItemTemplate
   } = useApp()
 
   const getFormErrorMessage = (name: keyof FormData) =>
@@ -258,14 +258,24 @@ export function App() {
         </form>
       </section>
 
-      <section>
-        <VirtualScroller
-          items={[1, 2, 3, 4, 5]}
-          itemSize={50}
-          // itemTemplate={itemTemplate}
-          className={styles.virtualScroller}
-          style={{ width: '200px', height: '200px' }}
-        />
+      <section className={styles.virtualScrollSection}>
+        <div className={styles.container}>
+          {filteredAccessLogs && (
+            <VirtualScroller
+              lazy
+              showLoader
+              delay={200}
+              itemSize={50}
+              loading={lazyLoading}
+              onLazyLoad={onLazyLoad}
+              items={filteredAccessLogs}
+              style={{ height: '500px' }}
+              loadingTemplate={getLoadingTemplate}
+              itemTemplate={getVirtualScrollerItemTemplate}
+              className={clsx(styles.virtualScroller, 'border-1 surface-border border-round')}
+            />
+          )}
+        </div>
       </section>
     </div>
   )
