@@ -1,10 +1,13 @@
 # Tâche technique Crownpeak
 
-## Start the app
+## Hello 👋 Thank you once again for the amazing opportunity to be part of your team! I hope you enjoy reviewing my work as much as I enjoyed writing it 😍
 
-To start the development server run `npm start`. Open your browser and navigate to http://localhost:4222/.
+### Start the app
 
-### Hello 👋 Thank you once again for the amazing opportunity to be part of your team! I hope you enjoy reviewing my work as much as I enjoyed writing it 😍
+- Download the app
+- Run `npm install`
+- Start the development server with `npm start`
+- Open your browser and navigate to http://localhost:4222/
 
 ✨ **Short description of what you'll see in the app:**
 
@@ -12,7 +15,7 @@ To start the development server run `npm start`. Open your browser and navigate 
   - Chart + chart filters
   - Virtual Scroll + virtual scroll filters
 
-## Tech stack
+### Tech stack
 
 - App: Build with [Nx, a Smart, fast and extensible build system.](https://nx.dev) as a React/TypeScript standalone application
 - Styles: CSS modules
