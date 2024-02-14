@@ -7,8 +7,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { VirtualScrollerTemplateOptions } from 'primereact/virtualscroller'
 
 import { getTimeRange } from '@utils'
-import { issueTypes, statusTypes } from '@constants'
 import { FormData, ChartDay, AccessLog } from '@interface'
+import { issueTypes, statusTypes, urlParamOptions } from '@constants'
 import { fetchRequestsCountService, fetchAccessLogsByFiltersService } from '@services'
 
 import styles from './app.module.scss'
@@ -172,6 +172,7 @@ export function useApp() {
     Controller,
     statusTypes,
     chartOptions,
+    urlParamOptions,
     requestsCountType,
     filteredAccessLogs,
 

@@ -22,6 +22,7 @@ export function App() {
     Controller,
     statusTypes,
     chartOptions,
+    urlParamOptions,
     requestsCountType,
     filteredAccessLogs,
 
@@ -198,12 +199,16 @@ export function App() {
               render={({ field, fieldState }) => (
                 <div>
                   <span className="p-float-label">
-                    <InputText
+                    <Dropdown
+                      showClear
                       id={field.name}
                       name={field.name}
-                      value={field.value || ''}
-                      className={clsx(fieldState.error && 'p-invalid')}
-                      onChange={e => field.onChange(e.target.value)}
+                      inputId={field.name}
+                      value={field.value}
+                      options={urlParamOptions}
+                      focusInputRef={field.ref}
+                      className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
+                      onChange={e => field.onChange(e.value)}
                     />
 
                     <label htmlFor={field.name}>URL</label>

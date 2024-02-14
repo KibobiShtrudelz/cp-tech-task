@@ -33,19 +33,7 @@ export const fetchAccessLogsByFiltersService = (
       .filter(
         log => log.status === 0 || issueType === undefined || issueType.type === log?.issue_type
       ) // Filtered by issueType
-      .filter(log => {
-        if (url === undefined) {
-          return true
-        } else if (url.length > 0) {
-          const [path] = url.split('?')
-
-          if (log.url?.includes(path)) {
-            return true
-          }
-        }
-
-        return false
-      }) // Filtered by url
+      .filter(log => url === undefined || log.url?.includes(url)) // Filtered by url
       .filter(log => {
         const from = responseTimeFrom ? +responseTimeFrom : 0
         const to = responseTimeTo ? +responseTimeTo : 0

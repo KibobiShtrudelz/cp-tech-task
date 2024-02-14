@@ -1,5 +1,20 @@
 import { Range } from '@interface'
 
+export const urlParamOptions = [
+  'path0',
+  'path1',
+  'path2',
+  'path3',
+  'path4',
+  'path5',
+  'path6',
+  'path7',
+  'path8',
+  'path9',
+  'path10',
+  'path11'
+]
+
 export const statusTypes = [
   { type: 0, name: 'Success' },
   { type: 1, name: 'Warning' },
