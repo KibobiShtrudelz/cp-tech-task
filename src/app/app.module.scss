@@ -31,12 +31,12 @@
     }
 
     .virtualScroller {
-      border-radius: 6pxs;
+      border-radius: 6px;
       border: 1px dashed #e7e8eb;
     }
   }
 
-  .virtualScrollTitle {
+  .title {
     text-align: center;
     margin-bottom: 24px;
   }
@@ -44,34 +44,44 @@
   .filtersScrollWrapper {
     display: flex;
     flex-wrap: wrap;
-    column-gap: 16px;
+    gap: 16px;
 
     .filterSection {
       flex: 1;
-      border: 2px dashed #fff;
 
       form {
         display: flex;
-        row-gap: 26px;
-        column-gap: 16px;
+        gap: 24px;
         flex-wrap: wrap;
+        flex-direction: column;
 
         margin-top: 32px;
+        min-width: 280px;
 
-        .dropdown {
-          width: 200px;
+        .inputsWrapper {
+          display: flex;
+          gap: 24px;
+          flex-direction: column;
+
+          .filter {
+            width: 100%;
+          }
         }
 
-        .button {
-          width: 100px;
-          height: 38px;
+        .buttonsWrapper {
+          display: flex;
+          gap: 16px;
+
+          .button {
+            flex: 1;
+            height: 38px;
+          }
         }
       }
     }
 
     .virtualScrollSection {
       flex: 2;
-      border: 2px dashed blue;
 
       .container {
         .virtualScrollerItemWrapper {

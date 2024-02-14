@@ -42,6 +42,8 @@ export function App() {
         <h1>Tâche technique Crownpeak</h1>
       </section>
 
+      <h2 className={styles.title}>Chart</h2>
+
       <section className={styles.chartFiltersWrapper}>
         <div className={styles.chartFilters}>
           <span className="p-float-label">
@@ -80,200 +82,206 @@ export function App() {
         <Divider />
       </section>
 
-      <h1 className={styles.virtualScrollTitle}>Virtual Scroll Filters</h1>
+      <h2 className={styles.title}>Virtual Scroll</h2>
 
       <div className={styles.filtersScrollWrapper}>
         <section className={styles.filterSection}>
           <form onSubmit={onSubmit}>
-            <Controller
-              name="timestampFrom"
-              control={control}
-              rules={{ required: 'Requis' }}
-              render={({ field, fieldState }) => (
-                <div>
-                  <span className="p-float-label">
-                    <Dropdown
-                      showClear
-                      id={field.name}
-                      name={field.name}
-                      inputId={field.name}
-                      value={field.value}
-                      options={getDays(31)}
-                      focusInputRef={field.ref}
-                      className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
-                      onChange={e => field.onChange(e.value)}
-                    />
+            <div className={styles.inputsWrapper}>
+              <Controller
+                name="timestampFrom"
+                control={control}
+                rules={{ required: 'Requis' }}
+                render={({ field, fieldState }) => (
+                  <div>
+                    <span className="p-float-label">
+                      <Dropdown
+                        showClear
+                        id={field.name}
+                        name={field.name}
+                        inputId={field.name}
+                        value={field.value}
+                        options={getDays(31)}
+                        focusInputRef={field.ref}
+                        className={clsx(styles.filter, fieldState.error && 'p-invalid')}
+                        onChange={e => field.onChange(e.value)}
+                      />
 
-                    <label htmlFor={field.name}>Timestamp From day</label>
-                  </span>
+                      <label htmlFor={field.name}>Timestamp From day</label>
+                    </span>
 
-                  {getFormErrorMessage('timestampFrom')}
-                </div>
-              )}
-            />
+                    {getFormErrorMessage(field.name)}
+                  </div>
+                )}
+              />
 
-            <Controller
-              name="timestampTo"
-              control={control}
-              rules={{ required: 'Requis' }}
-              render={({ field, fieldState }) => (
-                <div>
-                  {' '}
-                  <span className="p-float-label">
-                    <Dropdown
-                      showClear
-                      id={field.name}
-                      name={field.name}
-                      inputId={field.name}
-                      value={field.value}
-                      options={getDays(31)}
-                      focusInputRef={field.ref}
-                      className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
-                      onChange={e => field.onChange(e.value)}
-                    />
+              <Controller
+                name="timestampTo"
+                control={control}
+                rules={{ required: 'Requis' }}
+                render={({ field, fieldState }) => (
+                  <div>
+                    <span className="p-float-label">
+                      <Dropdown
+                        showClear
+                        id={field.name}
+                        name={field.name}
+                        inputId={field.name}
+                        value={field.value}
+                        options={getDays(31)}
+                        focusInputRef={field.ref}
+                        className={clsx(styles.filter, fieldState.error && 'p-invalid')}
+                        onChange={e => field.onChange(e.value)}
+                      />
 
-                    <label htmlFor={field.name}>Timestamp To day</label>
-                  </span>
-                  {getFormErrorMessage('timestampTo')}
-                </div>
-              )}
-            />
+                      <label htmlFor={field.name}>Timestamp To day</label>
+                    </span>
 
-            <Controller
-              name="status"
-              control={control}
-              render={({ field, fieldState }) => (
-                <div>
-                  <span className="p-float-label">
-                    <Dropdown
-                      showClear
-                      id={field.name}
-                      name={field.name}
-                      inputId={field.name}
-                      optionLabel="name"
-                      value={field.value}
-                      options={statusTypes}
-                      focusInputRef={field.ref}
-                      className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
-                      onChange={e => field.onChange(e.value)}
-                    />
+                    {getFormErrorMessage(field.name)}
+                  </div>
+                )}
+              />
 
-                    <label htmlFor={field.name}>Status</label>
-                  </span>
+              <Controller
+                name="status"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <div>
+                    <span className="p-float-label">
+                      <Dropdown
+                        showClear
+                        id={field.name}
+                        name={field.name}
+                        inputId={field.name}
+                        optionLabel="name"
+                        value={field.value}
+                        options={statusTypes}
+                        focusInputRef={field.ref}
+                        className={clsx(styles.filter, fieldState.error && 'p-invalid')}
+                        onChange={e => field.onChange(e.value)}
+                      />
 
-                  {getFormErrorMessage('status')}
-                </div>
-              )}
-            />
+                      <label htmlFor={field.name}>Status</label>
+                    </span>
 
-            <Controller
-              name="issueType"
-              control={control}
-              render={({ field, fieldState }) => (
-                <div>
-                  <span className="p-float-label">
-                    <Dropdown
-                      showClear
-                      id={field.name}
-                      name={field.name}
-                      inputId={field.name}
-                      optionLabel="name"
-                      value={field.value}
-                      options={issueTypes}
-                      focusInputRef={field.ref}
-                      className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
-                      onChange={e => field.onChange(e.value)}
-                    />
+                    {getFormErrorMessage(field.name)}
+                  </div>
+                )}
+              />
 
-                    <label htmlFor={field.name}>Issue Type</label>
-                  </span>
+              <Controller
+                name="issueType"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <div>
+                    <span className="p-float-label">
+                      <Dropdown
+                        showClear
+                        id={field.name}
+                        name={field.name}
+                        inputId={field.name}
+                        optionLabel="name"
+                        value={field.value}
+                        options={issueTypes}
+                        focusInputRef={field.ref}
+                        className={clsx(styles.filter, fieldState.error && 'p-invalid')}
+                        onChange={e => field.onChange(e.value)}
+                      />
 
-                  {getFormErrorMessage('issueType')}
-                </div>
-              )}
-            />
+                      <label htmlFor={field.name}>Issue Type</label>
+                    </span>
 
-            <Controller
-              name="url"
-              control={control}
-              render={({ field, fieldState }) => (
-                <div>
-                  <span className="p-float-label">
-                    <Dropdown
-                      showClear
-                      id={field.name}
-                      name={field.name}
-                      inputId={field.name}
-                      value={field.value}
-                      options={urlParamOptions}
-                      focusInputRef={field.ref}
-                      className={clsx(styles.dropdown, fieldState.error && 'p-invalid')}
-                      onChange={e => field.onChange(e.value)}
-                    />
+                    {getFormErrorMessage(field.name)}
+                  </div>
+                )}
+              />
 
-                    <label htmlFor={field.name}>URL</label>
-                  </span>
+              <Controller
+                name="url"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <div>
+                    <span className="p-float-label">
+                      <Dropdown
+                        showClear
+                        id={field.name}
+                        name={field.name}
+                        inputId={field.name}
+                        value={field.value}
+                        options={urlParamOptions}
+                        focusInputRef={field.ref}
+                        className={clsx(styles.filter, fieldState.error && 'p-invalid')}
+                        onChange={e => field.onChange(e.value)}
+                      />
 
-                  {getFormErrorMessage('url')}
-                </div>
-              )}
-            />
+                      <label htmlFor={field.name}>URL Param</label>
+                    </span>
 
-            <Controller
-              name="responseTimeFrom"
-              control={control}
-              render={({ field, fieldState }) => (
-                <div>
-                  <span className="p-float-label">
-                    <InputText
-                      keyfilter="int"
-                      id={field.name}
-                      name={field.name}
-                      value={field.value || ''}
-                      className={clsx(fieldState.error && 'p-invalid')}
-                      onChange={e => field.onChange(e.target.value)}
-                    />
+                    {getFormErrorMessage(field.name)}
+                  </div>
+                )}
+              />
 
-                    <label htmlFor={field.name}>Response time From</label>
-                  </span>
+              <Controller
+                name="responseTimeFrom"
+                control={control}
+                rules={{ required: '' }}
+                render={({ field, fieldState }) => (
+                  <div>
+                    <span className="p-float-label">
+                      <InputText
+                        keyfilter="int"
+                        id={field.name}
+                        name={field.name}
+                        value={field.value || ''}
+                        className={clsx(styles.filter, fieldState.error && 'p-invalid')}
+                        onChange={e => field.onChange(e.target.value)}
+                      />
 
-                  {getFormErrorMessage('responseTimeFrom')}
-                </div>
-              )}
-            />
+                      <label htmlFor={field.name}>Response time From</label>
+                    </span>
 
-            <Controller
-              name="responseTimeTo"
-              control={control}
-              render={({ field, fieldState }) => (
-                <div>
-                  <span className="p-float-label">
-                    <InputText
-                      keyfilter="int"
-                      id={field.name}
-                      name={field.name}
-                      value={field.value || ''}
-                      className={clsx(fieldState.error && 'p-invalid')}
-                      onChange={e => field.onChange(e.target.value)}
-                    />
+                    {getFormErrorMessage(field.name)}
+                  </div>
+                )}
+              />
 
-                    <label htmlFor={field.name}>Response time To</label>
-                  </span>
+              <Controller
+                name="responseTimeTo"
+                control={control}
+                rules={{ required: '' }}
+                render={({ field, fieldState }) => (
+                  <div>
+                    <span className="p-float-label">
+                      <InputText
+                        keyfilter="int"
+                        id={field.name}
+                        name={field.name}
+                        value={field.value || ''}
+                        className={clsx(styles.filter, fieldState.error && 'p-invalid')}
+                        onChange={e => field.onChange(e.target.value)}
+                      />
 
-                  {getFormErrorMessage('responseTimeTo')}
-                </div>
-              )}
-            />
+                      <label htmlFor={field.name}>Response time To</label>
+                    </span>
 
-            <Button
-              type="reset"
-              label="Reset"
-              severity="secondary"
-              className={styles.button}
-              onClick={reset as React.MouseEventHandler<HTMLButtonElement>}
-            />
+                    {getFormErrorMessage(field.name)}
+                  </div>
+                )}
+              />
+            </div>
 
-            <Button className={styles.button} type="submit" label="Submit" />
+            <div className={styles.buttonsWrapper}>
+              <Button
+                type="reset"
+                label="Reset"
+                severity="secondary"
+                className={styles.button}
+                onClick={reset as React.MouseEventHandler<HTMLButtonElement>}
+              />
+
+              <Button className={styles.button} type="submit" label="Submit" />
+            </div>
           </form>
         </section>
 
@@ -285,9 +293,9 @@ export function App() {
                 delay={250}
                 itemSize={230}
                 items={filteredAccessLogs}
-                style={{ height: '560px', minWidth: '320px' }}
                 loadingTemplate={getLoadingTemplate}
                 itemTemplate={getVirtualScrollerItemTemplate}
+                style={{ height: '730px', minWidth: '280px' }}
                 className="border-1 surface-border border-round"
               />
             ) : (
