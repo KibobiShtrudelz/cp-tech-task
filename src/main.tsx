@@ -1,7 +1,6 @@
 import { StrictMode } from 'react'
 import * as ReactDOM from 'react-dom/client'
 import { PrimeReactProvider } from 'primereact/api'
-import { BrowserRouter as Router } from 'react-router-dom'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
@@ -24,11 +23,9 @@ const primeReactValues = {
 root.render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <PrimeReactProvider value={primeReactValues}>
-          <App />
-        </PrimeReactProvider>
-      </Router>
+      <PrimeReactProvider value={primeReactValues}>
+        <App />
+      </PrimeReactProvider>
 
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

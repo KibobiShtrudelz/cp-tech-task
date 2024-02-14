@@ -6,6 +6,8 @@ import dummyData from './access_logs.json'
 // This service is used to mimic data fetching from a server
 // In this case, we're using the dummy data and client calculations to simulate a server response
 // All of the calculations inside the service's body are meant to be done in the backend
+// No pagination is implemented intentionally because this type of calculation is expensive and it's done on the back-end! If I do it here, it would be a performance issue!
+// (*) Instead, I'm using the virtual scroller to render the data in chunks and all filtering is done with only one iteration here!
 export const fetchAccessLogsByFiltersService = (
   filters?: FetchAccessLogsByFiltersServiceProps
 ) => ({
@@ -20,36 +22,42 @@ export const fetchAccessLogsByFiltersService = (
     const responseTimeFrom = filters?.responseTimeFrom
     const responseTimeTo = filters?.responseTimeTo
 
-    // Return the log in every filter() if filter value is undefined since no URL filter is set
-    const filteredAccessLogs = dummyData
-      .filter(log => {
-        const from = timestampFrom ? +timestampFrom : 0
-        const to = timestampTo ? +timestampTo : 0
-        const timestampDay = convertUnixTimestamp(log.timestamp, 'Day')
+    // (*)
+    const filteredAccessLogs = dummyData.filter(log => {
+      const from = timestampFrom ? +timestampFrom : 0
+      const to = timestampTo ? +timestampTo : 0
+      const timestampDay = convertUnixTimestamp(log.timestamp, 'Day')
 
-        return timestampDay >= from && timestampDay <= to
-      }) // Filtered by timestamp
-      .filter(log => status === undefined || status.type === log.status) // Filtered by status
-      .filter(
-        log => log.status === 0 || issueType === undefined || issueType.type === log?.issue_type
-      ) // Filtered by issueType
-      .filter(log => url === undefined || log.url?.includes(url)) // Filtered by url
-      .filter(log => {
-        const from = responseTimeFrom ? +responseTimeFrom : 0
-        const to = responseTimeTo ? +responseTimeTo : 0
+      // Filtered by timestamp
+      if (timestampDay >= from && timestampDay <= to) {
+        // Filtered by status
+        if (status === undefined || status.type === log.status) {
+          // Filtered by issueType
+          if (log.status === 0 || issueType === undefined || issueType.type === log?.issue_type) {
+            // Filtered by url
+            if (url === undefined || log.url?.includes(url)) {
+              const from = responseTimeFrom ? +responseTimeFrom : 0
+              const to = responseTimeTo ? +responseTimeTo : 0
 
-        if (!from && !to) {
-          return true
+              // Filtered by responseTime
+              if (!from && !to) {
+                return true
+              }
+
+              if (from && !to) {
+                return log.response_time >= from
+              } else if (!from && to) {
+                return log.response_time <= to
+              } else {
+                return log.response_time >= from && log.response_time <= to
+              }
+            }
+          }
         }
+      }
 
-        if (from && !to) {
-          return log.response_time >= from
-        } else if (!from && to) {
-          return log.response_time <= to
-        } else {
-          return log.response_time >= from && log.response_time <= to
-        }
-      }) // Filtered by responseTime
+      return false
+    })
 
     return filteredAccessLogs
   },

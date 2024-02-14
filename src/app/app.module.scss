@@ -108,3 +108,11 @@
     }
   }
 }
+
+.requiredLabel {
+  &::after {
+    content: ' *';
+    font-size: 18px;
+    color: rgb(252, 50, 50);
+  }
+}

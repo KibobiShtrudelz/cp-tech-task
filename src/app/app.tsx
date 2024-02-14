@@ -91,7 +91,7 @@ export function App() {
               <Controller
                 name="timestampFrom"
                 control={control}
-                rules={{ required: 'Requis' }}
+                rules={{ required: 'Champ requis' }}
                 render={({ field, fieldState }) => (
                   <div>
                     <span className="p-float-label">
@@ -107,7 +107,9 @@ export function App() {
                         onChange={e => field.onChange(e.value)}
                       />
 
-                      <label htmlFor={field.name}>Timestamp From day</label>
+                      <label htmlFor={field.name} className={styles.requiredLabel}>
+                        Timestamp From day
+                      </label>
                     </span>
 
                     {getFormErrorMessage(field.name)}
@@ -118,7 +120,7 @@ export function App() {
               <Controller
                 name="timestampTo"
                 control={control}
-                rules={{ required: 'Requis' }}
+                rules={{ required: 'Champ requis' }}
                 render={({ field, fieldState }) => (
                   <div>
                     <span className="p-float-label">
@@ -134,7 +136,9 @@ export function App() {
                         onChange={e => field.onChange(e.value)}
                       />
 
-                      <label htmlFor={field.name}>Timestamp To day</label>
+                      <label htmlFor={field.name} className={styles.requiredLabel}>
+                        Timestamp To day
+                      </label>
                     </span>
 
                     {getFormErrorMessage(field.name)}
