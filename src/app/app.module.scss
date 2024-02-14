@@ -26,11 +26,29 @@
       }
     }
 
-    &.filterSection {
-      h1 {
-        text-align: center;
-        margin-bottom: 32px;
-      }
+    .chartDropdown {
+      width: 200px;
+    }
+
+    .virtualScroller {
+      border-radius: 6pxs;
+      border: 1px dashed #e7e8eb;
+    }
+  }
+
+  .virtualScrollTitle {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .filtersScrollWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 16px;
+
+    .filterSection {
+      flex: 1;
+      border: 2px dashed #fff;
 
       form {
         display: flex;
@@ -51,7 +69,10 @@
       }
     }
 
-    &.virtualScrollSection {
+    .virtualScrollSection {
+      flex: 2;
+      border: 2px dashed blue;
+
       .container {
         .virtualScrollerItemWrapper {
           display: flex;
@@ -74,15 +95,6 @@
           }
         }
       }
-    }
-
-    .chartDropdown {
-      width: 200px;
-    }
-
-    .virtualScroller {
-      border-radius: 6pxs;
-      border: 1px dashed #e7e8eb;
     }
   }
 }
